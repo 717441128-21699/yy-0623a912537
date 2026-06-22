@@ -1,0 +1,321 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #FFF7E6 0%, $color-bg-page 30%);
+  padding-bottom: 40rpx;
+}
+
+.header {
+  padding: $spacing-lg $page-padding;
+  padding-top: $spacing-xl;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+}
+
+.avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+  margin-right: $spacing-md;
+}
+
+.userDetails {
+  flex: 1;
+}
+
+.userName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.userRole {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.shiftInfo {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  color: $color-text-white;
+}
+
+.shiftTitle {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+  margin-bottom: $spacing-sm;
+}
+
+.shiftTime {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $spacing-xs;
+}
+
+.shiftStatus {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+}
+
+.section {
+  padding: 0 $page-padding;
+  margin-bottom: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.quickActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+}
+
+.actionItem {
+  width: calc((100% - #{$spacing-md * 2}) / 3);
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg $spacing-md;
+  box-shadow: $shadow-card;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.actionIcon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  margin-bottom: $spacing-sm;
+
+  &.blue {
+    background: rgba(22, 119, 255, 0.1);
+    color: $color-primary;
+  }
+
+  &.green {
+    background: rgba(0, 180, 42, 0.1);
+    color: $color-success;
+  }
+
+  &.orange {
+    background: rgba(255, 125, 0, 0.1);
+    color: $color-warning;
+  }
+
+  &.red {
+    background: rgba(245, 63, 63, 0.1);
+    color: $color-error;
+  }
+
+  &.cyan {
+    background: rgba(54, 207, 201, 0.1);
+    color: $color-secondary;
+  }
+
+  &.purple {
+    background: rgba(114, 46, 209, 0.1);
+    color: #722ED1;
+  }
+}
+
+.actionText {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.performanceCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.performanceHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.performanceTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.performanceDate {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.performanceList {
+  max-height: 400rpx;
+  overflow-y: auto;
+}
+
+.performanceItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md 0;
+  border-bottom: 1px solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.rank {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: $color-bg-page;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-tertiary;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+
+  &.top1 {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #fff;
+  }
+
+  &.top2 {
+    background: linear-gradient(135deg, #C0C0C0 0%, #A0A0A0 100%);
+    color: #fff;
+  }
+
+  &.top3 {
+    background: linear-gradient(135deg, #CD7F32 0%, #B87333 100%);
+    color: #fff;
+  }
+}
+
+.consultantInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.consultantName {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.consultantCount {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.performanceAmount {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+}
+
+.reminderCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.reminderTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.reminderItem {
+  display: flex;
+  align-items: flex-start;
+  padding: $spacing-md;
+  background: linear-gradient(135deg, #FFF7E6 0%, #FFE7BA 100%);
+  border-radius: $radius-md;
+  margin-bottom: $spacing-sm;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &.error {
+    background: linear-gradient(135deg, #FFECE8 0%, #FFCCC5 100%);
+  }
+}
+
+.reminderIcon {
+  font-size: $font-size-lg;
+  margin-right: $spacing-sm;
+  flex-shrink: 0;
+}
+
+.reminderContent {
+  flex: 1;
+}
+
+.reminderText {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  line-height: 1.5;
+  margin-bottom: 4rpx;
+}
+
+.reminderAction {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-xl;
+}
+
+.emptyIcon {
+  font-size: 80rpx;
+  color: $color-text-disabled;
+  margin-bottom: $spacing-md;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}

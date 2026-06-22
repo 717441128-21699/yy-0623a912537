@@ -1,0 +1,268 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 160rpx;
+}
+
+.exceptionHeader {
+  padding: 80rpx $page-padding 100rpx;
+  text-align: center;
+  color: $color-text-white;
+
+  &.expired {
+    background: linear-gradient(135deg, #F53F3F 0%, #FF6B6B 100%);
+  }
+
+  &.frozen {
+    background: linear-gradient(135deg, #FF7D00 0%, #FF9A2E 100%);
+  }
+
+  &.used {
+    background: linear-gradient(135deg, $color-text-tertiary 0%, #9CA3AF 100%);
+  }
+
+  &.not_found {
+    background: linear-gradient(135deg, $color-text-secondary 0%, #6B7280 100%);
+  }
+}
+
+.exceptionIcon {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto $spacing-lg;
+  font-size: 60rpx;
+}
+
+.exceptionTitle {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  margin-bottom: $spacing-sm;
+}
+
+.exceptionSubtitle {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+}
+
+.contentSection {
+  margin-top: -60rpx;
+  padding: 0 $page-padding;
+}
+
+.infoCard {
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+}
+
+.infoSection {
+  padding: 0 $page-padding;
+  margin-top: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+}
+
+.sectionIcon {
+  font-size: $font-size-lg;
+  margin-right: $spacing-sm;
+}
+
+.reasonCard {
+  background: #FFF1F0;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border-left: 6rpx solid $color-error;
+  margin-bottom: $spacing-lg;
+}
+
+.reasonTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-error;
+  margin-bottom: $spacing-sm;
+  display: flex;
+  align-items: center;
+}
+
+.reasonIcon {
+  font-size: $font-size-lg;
+  margin-right: $spacing-sm;
+}
+
+.reasonText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.8;
+}
+
+.suggestionCard {
+  background: #E6F7FF;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border-left: 6rpx solid $color-primary;
+  margin-bottom: $spacing-lg;
+}
+
+.suggestionTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  margin-bottom: $spacing-sm;
+  display: flex;
+  align-items: center;
+}
+
+.suggestionIcon {
+  font-size: $font-size-lg;
+  margin-right: $spacing-sm;
+}
+
+.suggestionText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.8;
+}
+
+.actionCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.infoRow {
+  display: flex;
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.infoLabel {
+  width: 160rpx;
+  flex-shrink: 0;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  line-height: 1.5;
+}
+
+.infoValue {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  line-height: 1.5;
+  font-weight: $font-weight-medium;
+}
+
+.statusTag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+
+  &.expired {
+    background: rgba(245, 63, 63, 0.1);
+    color: $color-error;
+  }
+
+  &.frozen {
+    background: rgba(255, 125, 0, 0.1);
+    color: $color-warning;
+  }
+
+  &.used {
+    background: rgba(134, 144, 156, 0.1);
+    color: $color-text-tertiary;
+  }
+
+  &.not_found {
+    background: rgba(134, 144, 156, 0.1);
+    color: $color-text-secondary;
+  }
+}
+
+.remarkInput {
+  flex: 1;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  min-height: 160rpx;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  line-height: 1.6;
+}
+
+.remarkInputWrapper {
+  flex: 1;
+}
+
+.actionButtons {
+  padding: 0 $page-padding;
+  margin-top: $spacing-xl;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.actionBtn {
+  width: 100%;
+  height: 88rpx;
+  background: $color-bg-card;
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.primary {
+    background: $color-primary;
+    color: $color-text-white;
+  }
+
+  &.warning {
+    background: $color-warning;
+    color: $color-text-white;
+  }
+
+  &.error {
+    background: $color-error;
+    color: $color-text-white;
+  }
+
+  &.secondary {
+    background: transparent;
+    border: 2rpx solid $color-border;
+    color: $color-text-secondary;
+    box-shadow: none;
+  }
+}
+
+.actionBtnIcon {
+  margin-right: $spacing-sm;
+  font-size: $font-size-lg;
+}

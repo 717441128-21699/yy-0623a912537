@@ -1,0 +1,77 @@
+@use '@/styles/variables.scss' as *;
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.available {
+  color: $color-coupon-available;
+  background-color: $color-bg-tag-success;
+}
+
+.used {
+  color: $color-coupon-used;
+  background-color: rgba(134, 144, 156, 0.1);
+}
+
+.expired {
+  color: $color-coupon-expired;
+  background-color: $color-bg-tag-error;
+}
+
+.frozen {
+  color: $color-coupon-frozen;
+  background-color: $color-bg-tag-warning;
+}
+
+.pending {
+  color: $color-warning;
+  background-color: $color-bg-tag-warning;
+}
+
+.arrived {
+  color: $color-success;
+  background-color: $color-bg-tag-success;
+}
+
+.completed {
+  color: $color-primary;
+  background-color: $color-bg-tag-primary;
+}
+
+.cancelled {
+  color: $color-text-tertiary;
+  background-color: rgba(134, 144, 156, 0.1);
+}
+
+.success {
+  color: $color-success;
+  background-color: $color-bg-tag-success;
+}
+
+.revoked {
+  color: $color-error;
+  background-color: $color-bg-tag-error;
+}
+
+.experience {
+  color: $color-primary;
+  background-color: $color-bg-tag-primary;
+}
+
+.course {
+  color: $color-secondary;
+  background-color: rgba(54, 207, 201, 0.1);
+}
+
+.gift {
+  color: $color-warning;
+  background-color: $color-bg-tag-warning;
+}

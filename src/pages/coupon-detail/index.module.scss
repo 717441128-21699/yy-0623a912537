@@ -1,0 +1,269 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 140rpx;
+}
+
+.header {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  padding: $spacing-xl $page-padding;
+  color: $color-text-white;
+}
+
+.typeTag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+  margin-bottom: $spacing-md;
+}
+
+.couponName {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  line-height: 1.3;
+  margin-bottom: $spacing-sm;
+}
+
+.couponCode {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+}
+
+.countSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xl * 2;
+  padding: $spacing-lg;
+  margin: -$spacing-lg $page-padding 0;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  position: relative;
+  z-index: 10;
+}
+
+.countItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.countValue {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  line-height: 1.2;
+}
+
+.countLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.countDivider {
+  width: 1px;
+  height: 60rpx;
+  background: $color-divider;
+}
+
+.section {
+  padding: 0 $page-padding;
+  margin-top: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.infoCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.infoRow {
+  display: flex;
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.infoLabel {
+  width: 140rpx;
+  flex-shrink: 0;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.infoValue {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  line-height: 1.5;
+}
+
+.applicableItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.itemTag {
+  padding: 8rpx 20rpx;
+  background: $color-bg-tag-primary;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  color: $color-primary;
+}
+
+.validityCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.validityRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.validityLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.validityValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  flex: 1;
+}
+
+.statusInfo {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  margin-top: $spacing-md;
+
+  &.available {
+    background: rgba(0, 180, 42, 0.08);
+  }
+
+  &.frozen {
+    background: rgba(255, 125, 0, 0.08);
+  }
+
+  &.expired {
+    background: rgba(245, 63, 63, 0.08);
+  }
+
+  &.used {
+    background: rgba(134, 144, 156, 0.08);
+  }
+}
+
+.statusIcon {
+  font-size: $font-size-xl;
+  margin-right: $spacing-sm;
+}
+
+.statusText {
+  flex: 1;
+  font-size: $font-size-sm;
+  line-height: 1.5;
+
+  &.available {
+    color: $color-success;
+  }
+
+  &.frozen {
+    color: $color-warning;
+  }
+
+  &.expired {
+    color: $color-error;
+  }
+
+  &.used {
+    color: $color-text-tertiary;
+  }
+}
+
+.notesCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.notesText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.6;
+}
+
+.historySection {
+  padding: 0 $page-padding;
+  margin-top: $spacing-lg;
+}
+
+.historyTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.historyItem {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md $spacing-lg;
+  margin-bottom: $spacing-sm;
+  box-shadow: $shadow-card;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.historyItemInfo {
+  flex: 1;
+}
+
+.historyItemTime {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.historyItemDetail {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.historyItemStatus {
+  font-size: $font-size-xs;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-sm;
+  background: $color-bg-tag-success;
+  color: $color-success;
+}

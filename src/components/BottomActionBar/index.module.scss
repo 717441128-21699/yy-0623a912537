@@ -1,0 +1,79 @@
+@use '@/styles/variables.scss' as *;
+
+.bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc($spacing-md + env(safe-area-inset-bottom));
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.06);
+  z-index: 100;
+  display: flex;
+  gap: $spacing-md;
+}
+
+.btn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+    transition: all $transition-base;
+  }
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  border: none;
+}
+
+.btnSecondary {
+  background: $color-bg-page;
+  color: $color-text-secondary;
+  border: 1px solid $color-border;
+}
+
+.btnSuccess {
+  background: linear-gradient(135deg, $color-success 0%, #23C343 100%);
+  color: $color-text-white;
+  border: none;
+}
+
+.btnWarning {
+  background: linear-gradient(135deg, $color-warning 0%, #FF9A2E 100%);
+  color: $color-text-white;
+  border: none;
+}
+
+.btnDanger {
+  background: linear-gradient(135deg, $color-error 0%, #FF6B6B 100%);
+  color: $color-text-white;
+  border: none;
+}
+
+.btnDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.singleBtn {
+  flex: 1;
+}
+
+.twoBtns {
+  .btnSecondary {
+    flex: 1;
+  }
+
+  .btnPrimary {
+    flex: 2;
+  }
+}

@@ -1,0 +1,182 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #E6FFFB 0%, $color-bg-page 30%);
+  padding-bottom: 40rpx;
+}
+
+.header {
+  padding: $spacing-lg $page-padding;
+  padding-top: $spacing-xl;
+}
+
+.title {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.subtitle {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.statsRow {
+  display: flex;
+  gap: $spacing-md;
+  padding: 0 $page-padding;
+  margin-bottom: $spacing-lg;
+}
+
+.filterSection {
+  padding: 0 $page-padding;
+  margin-bottom: $spacing-lg;
+}
+
+.filterCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  box-shadow: $shadow-card;
+  display: flex;
+  gap: $spacing-sm;
+  overflow-x: auto;
+  white-space: nowrap;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.filterItem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-sm $spacing-lg;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  background: $color-bg-page;
+  transition: all $transition-base;
+  flex-shrink: 0;
+
+  &.active {
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    color: $color-text-white;
+    font-weight: $font-weight-medium;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.filterCount {
+  margin-left: 8rpx;
+  font-size: $font-size-xs;
+  opacity: 0.8;
+}
+
+.warningBanner {
+  margin: 0 $page-spacing $spacing-lg;
+  padding: $spacing-md;
+  background: linear-gradient(135deg, #FFF7E6 0%, #FFE7BA 100%);
+  border-radius: $radius-md;
+  display: flex;
+  align-items: flex-start;
+}
+
+.warningIcon {
+  font-size: $font-size-lg;
+  margin-right: $spacing-sm;
+  flex-shrink: 0;
+}
+
+.warningContent {
+  flex: 1;
+}
+
+.warningTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-warning;
+  margin-bottom: 4rpx;
+}
+
+.warningDesc {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  line-height: 1.5;
+}
+
+.appointmentList {
+  padding: 0 $page-padding;
+}
+
+.listHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.listTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.listCount {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.timeGroup {
+  margin-bottom: $spacing-lg;
+}
+
+.timeGroupTitle {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.timeDot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: $color-primary;
+  margin-right: $spacing-sm;
+}
+
+.timeText {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-xl * 2;
+}
+
+.emptyIcon {
+  font-size: 120rpx;
+  color: $color-text-disabled;
+  margin-bottom: $spacing-md;
+}
+
+.emptyText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: $spacing-xl;
+}

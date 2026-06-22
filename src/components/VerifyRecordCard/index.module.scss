@@ -1,0 +1,148 @@
+@use '@/styles/variables.scss' as *;
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.99);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.couponInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.couponName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  line-height: 1.4;
+  @include text-ellipsis;
+}
+
+.couponCode {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.customerInfo {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.customerName {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  margin-right: $spacing-md;
+}
+
+.customerPhone {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.divider {
+  height: 1px;
+  background: $color-divider;
+  margin: $spacing-md 0;
+}
+
+.itemRow {
+  display: flex;
+  margin-bottom: $spacing-xs;
+  font-size: $font-size-sm;
+}
+
+.itemLabel {
+  color: $color-text-tertiary;
+  width: 120rpx;
+  flex-shrink: 0;
+}
+
+.itemValue {
+  flex: 1;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.verifyInfo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  margin-top: $spacing-md;
+}
+
+.verifyItem {
+  display: flex;
+  flex-direction: column;
+  min-width: 120rpx;
+}
+
+.verifyItemLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: 4rpx;
+}
+
+.verifyItemValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: $spacing-lg;
+  padding-top: $spacing-md;
+  border-top: 1px dashed $color-border;
+}
+
+.verifyTime {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.voucherNo {
+  font-size: $font-size-sm;
+  color: $color-primary;
+}
+
+.revoked {
+  opacity: 0.6;
+}
+
+.btnRevoke {
+  @include button-reset;
+  padding: 0 $spacing-lg;
+  height: $button-height-sm;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  color: $color-error;
+  background: $color-bg-tag-error;
+  border: none;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}

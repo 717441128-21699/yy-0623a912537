@@ -1,0 +1,349 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 160rpx;
+}
+
+.shiftHeader {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  padding: 48rpx $page-padding 80rpx;
+  color: $color-text-white;
+}
+
+.shiftTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  margin-bottom: $spacing-sm;
+}
+
+.shiftMeta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  font-size: $font-size-sm;
+  opacity: 0.9;
+}
+
+.shiftTag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+}
+
+.statsSection {
+  margin-top: -48rpx;
+  padding: 0 $page-padding;
+  display: flex;
+  gap: $spacing-md;
+}
+
+.statsCard {
+  flex: 1;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  text-align: center;
+}
+
+.statsValue {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.statsLabel {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.statsCard.success .statsValue {
+  color: $color-success;
+}
+
+.statsCard.warning .statsValue {
+  color: $color-warning;
+}
+
+.statsCard.error .statsValue {
+  color: $color-error;
+}
+
+.infoSection {
+  padding: 0 $page-padding;
+  margin-top: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sectionTitleText {
+  display: flex;
+  align-items: center;
+}
+
+.sectionIcon {
+  font-size: $font-size-lg;
+  margin-right: $spacing-sm;
+}
+
+.sectionBadge {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  background: $color-bg-tag-primary;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.infoCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.infoLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.infoValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.typeList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.typeItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+}
+
+.typeIcon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-xl;
+  margin-right: $spacing-md;
+
+  &.experience {
+    background: rgba(22, 119, 255, 0.1);
+  }
+
+  &.course {
+    background: rgba(54, 207, 201, 0.1);
+  }
+
+  &.gift {
+    background: rgba(255, 125, 0, 0.1);
+  }
+}
+
+.typeInfo {
+  flex: 1;
+}
+
+.typeName {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  margin-bottom: 4rpx;
+}
+
+.typeCount {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.typeAmount {
+  font-size: $font-size-lg;
+  color: $color-primary;
+  font-weight: $font-weight-bold;
+}
+
+.performanceList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.performanceItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md 0;
+  border-bottom: 1rpx solid #F2F3F5;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  &:first-child {
+    padding-top: 0;
+  }
+}
+
+.rankBadge {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  margin-right: $spacing-md;
+
+  &.rank1 {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #fff;
+  }
+
+  &.rank2 {
+    background: linear-gradient(135deg, #C0C0C0 0%, #A0A0A0 100%);
+    color: #fff;
+  }
+
+  &.rank3 {
+    background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);
+    color: #fff;
+  }
+
+  &.normal {
+    background: $color-bg-page;
+    color: $color-text-secondary;
+  }
+}
+
+.consultantInfo {
+  flex: 1;
+}
+
+.consultantName {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  margin-bottom: 4rpx;
+}
+
+.consultantCount {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.consultantAmount {
+  font-size: $font-size-md;
+  color: $color-primary;
+  font-weight: $font-weight-bold;
+}
+
+.alertCard {
+  background: #FFF1F0;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border-left: 6rpx solid $color-error;
+  margin-bottom: $spacing-lg;
+}
+
+.alertTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-error;
+  margin-bottom: $spacing-sm;
+  display: flex;
+  align-items: center;
+}
+
+.alertIcon {
+  font-size: $font-size-lg;
+  margin-right: $spacing-sm;
+}
+
+.alertText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.8;
+}
+
+.alertBtn {
+  display: inline-block;
+  margin-top: $spacing-md;
+  padding: 8rpx 24rpx;
+  background: $color-error;
+  border-radius: $radius-button;
+  font-size: $font-size-xs;
+  color: $color-text-white;
+}
+
+.summaryCard {
+  background: linear-gradient(135deg, rgba(22, 119, 255, 0.05) 0%, rgba(54, 207, 201, 0.05) 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border: 2rpx solid rgba(22, 119, 255, 0.2);
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+    padding-top: $spacing-md;
+    border-top: 1px dashed $color-border;
+  }
+}
+
+.summaryLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.summaryValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+
+  &.highlight {
+    font-size: $font-size-xl;
+    color: $color-primary;
+    font-weight: $font-weight-bold;
+  }
+}

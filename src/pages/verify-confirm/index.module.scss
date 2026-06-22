@@ -1,0 +1,348 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 160rpx;
+}
+
+.couponInfo {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  padding: $spacing-xl $page-padding;
+  color: $color-text-white;
+}
+
+.couponName {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  line-height: 1.3;
+  margin-bottom: $spacing-sm;
+}
+
+.couponMeta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  font-size: $font-size-sm;
+  opacity: 0.9;
+}
+
+.couponCode {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: $radius-sm;
+}
+
+.section {
+  padding: 0 $page-padding;
+  margin-top: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.infoCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.infoRow {
+  display: flex;
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.infoLabel {
+  width: 140rpx;
+  flex-shrink: 0;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  line-height: 48rpx;
+}
+
+.infoValue {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  line-height: 48rpx;
+}
+
+.selectWrapper {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.selectItem {
+  padding: 0 $spacing-md;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-md;
+  border: 2rpx solid $color-border;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  background: $color-bg-page;
+  transition: all $transition-base;
+
+  &.active {
+    border-color: $color-primary;
+    background: $color-bg-tag-primary;
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.inputWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+  height: 64rpx;
+}
+
+.input {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+}
+
+.countControl {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+}
+
+.countBtn {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  transition: all $transition-base;
+
+  &.minus {
+    background: $color-bg-page;
+    color: $color-text-secondary;
+    border: 2rpx solid $color-border;
+  }
+
+  &.plus {
+    background: $color-primary;
+    color: $color-text-white;
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.countValue {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  min-width: 60rpx;
+  text-align: center;
+}
+
+.confirmSection {
+  background: linear-gradient(135deg, rgba(0, 180, 42, 0.08) 0%, rgba(35, 195, 67, 0.08) 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border: 2rpx solid rgba(0, 180, 42, 0.2);
+}
+
+.confirmTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-success;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+}
+
+.confirmIcon {
+  font-size: $font-size-lg;
+  margin-right: $spacing-sm;
+}
+
+.confirmItem {
+  display: flex;
+  margin-bottom: $spacing-sm;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.confirmLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  width: 140rpx;
+  flex-shrink: 0;
+}
+
+.confirmValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  flex: 1;
+}
+
+.noticeSection {
+  background: #FFFBE6;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border-left: 6rpx solid #FAAD14;
+}
+
+.noticeTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: #D48806;
+  margin-bottom: $spacing-sm;
+  display: flex;
+  align-items: center;
+}
+
+.noticeIcon {
+  font-size: $font-size-lg;
+  margin-right: $spacing-sm;
+}
+
+.noticeText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.6;
+}
+
+.noticeList {
+  margin-top: $spacing-sm;
+  padding-left: $spacing-lg;
+}
+
+.noticeListItem {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.8;
+}
+
+.customerConfirm {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.signatureArea {
+  width: 100%;
+  height: 200rpx;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  border: 2rpx dashed $color-border;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: $spacing-md;
+}
+
+.signaturePlaceholder {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: $radius-sm;
+  border: 2rpx solid $color-border;
+  margin-right: $spacing-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-base;
+
+  &.checked {
+    background: $color-primary;
+    border-color: $color-primary;
+  }
+}
+
+.checkboxIcon {
+  color: $color-text-white;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+}
+
+.checkboxLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.summaryCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+
+  &:last-child {
+    margin-bottom: 0;
+    padding-top: $spacing-md;
+    border-top: 1px dashed $color-border;
+  }
+}
+
+.summaryLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.summaryValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+
+  &.highlight {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+  }
+}

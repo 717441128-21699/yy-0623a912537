@@ -1,0 +1,345 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 160rpx;
+}
+
+.appointmentHeader {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  padding: 48rpx $page-padding 80rpx;
+  color: $color-text-white;
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.statusTag {
+  display: inline-block;
+  padding: 6rpx 20rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+
+  &.pending {
+    background: rgba(255, 125, 0, 0.9);
+  }
+
+  &.arrived {
+    background: rgba(0, 180, 42, 0.9);
+  }
+
+  &.completed {
+    background: rgba(22, 119, 255, 0.9);
+  }
+
+  &.cancelled {
+    background: rgba(134, 144, 156, 0.9);
+  }
+}
+
+.timeText {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+}
+
+.itemName {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  margin-bottom: $spacing-sm;
+}
+
+.itemCategory {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+}
+
+.infoSection {
+  padding: 0 $page-padding;
+  margin-top: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sectionTitleText {
+  display: flex;
+  align-items: center;
+}
+
+.sectionIcon {
+  font-size: $font-size-lg;
+  margin-right: $spacing-sm;
+}
+
+.sectionBadge {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  background: $color-bg-tag-primary;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+
+  &.warning {
+    background: rgba(255, 125, 0, 0.1);
+    color: $color-warning;
+  }
+
+  &.success {
+    background: rgba(0, 180, 42, 0.1);
+    color: $color-success;
+  }
+}
+
+.infoCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.infoRow {
+  display: flex;
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.infoLabel {
+  width: 140rpx;
+  flex-shrink: 0;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  line-height: 1.5;
+}
+
+.infoValue {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  line-height: 1.5;
+  font-weight: $font-weight-medium;
+}
+
+.phoneLink {
+  color: $color-primary;
+}
+
+.couponSection {
+  margin-top: -48rpx;
+  padding: 0 $page-padding;
+}
+
+.couponCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &.matched {
+    border-color: $color-success;
+    background: linear-gradient(135deg, rgba(0, 180, 42, 0.03) 0%, rgba(35, 195, 67, 0.03) 100%);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.couponHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.couponTypeTag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+
+  &.experience {
+    background: rgba(22, 119, 255, 0.1);
+    color: $color-primary;
+  }
+
+  &.course {
+    background: rgba(54, 207, 201, 0.1);
+    color: #36CFC9;
+  }
+
+  &.gift {
+    background: rgba(255, 125, 0, 0.1);
+    color: $color-warning;
+  }
+}
+
+.matchTag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  background: rgba(0, 180, 42, 0.1);
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+  color: $color-success;
+  font-weight: $font-weight-medium;
+}
+
+.couponName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.couponInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.couponInfoItem {
+  display: flex;
+  align-items: center;
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.couponInfoIcon {
+  margin-right: $spacing-xs;
+  font-size: $font-size-sm;
+}
+
+.couponInfoValue {
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.couponFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: $spacing-md;
+  border-top: 1px dashed $color-border;
+}
+
+.couponRemaining {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.couponRemainingValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  margin-right: $spacing-xs;
+}
+
+.useBtn {
+  padding: 12rpx 32rpx;
+  background: $color-primary;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.95);
+    opacity: 0.9;
+  }
+}
+
+.emptyCoupon {
+  text-align: center;
+  padding: $spacing-xl 0;
+}
+
+.emptyIcon {
+  font-size: 80rpx;
+  color: #C9CDD4;
+  margin-bottom: $spacing-md;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.tipsCard {
+  background: #FFFBE6;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border-left: 6rpx solid #FAAD14;
+  margin-bottom: $spacing-lg;
+}
+
+.tipsTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: #D48806;
+  margin-bottom: $spacing-sm;
+  display: flex;
+  align-items: center;
+}
+
+.tipsIcon {
+  font-size: $font-size-lg;
+  margin-right: $spacing-sm;
+}
+
+.tipsText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.8;
+}
+
+.serviceArrangement {
+  display: flex;
+  gap: $spacing-md;
+  margin-top: $spacing-md;
+}
+
+.serviceItem {
+  flex: 1;
+  text-align: center;
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+}
+
+.serviceItemLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-xs;
+}
+
+.serviceItemValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}

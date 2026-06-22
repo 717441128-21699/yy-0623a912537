@@ -23,6 +23,7 @@ interface VerifyState {
   searchCouponByPhone: (phone: string) => Coupon[]
   getCouponById: (id: string) => Coupon | null
   getAppointmentById: (id: string) => Appointment | null
+  getAppointmentByCouponId: (couponId: string) => Appointment | null
   setCurrentCoupon: (coupon: Coupon | null) => void
   setCurrentAppointment: (appointment: Appointment | null) => void
   setVerifyFormData: (data: Partial<VerifyFormData>) => void
@@ -56,6 +57,8 @@ export const useVerifyStore = create<VerifyState>((set, get) => ({
     console.log('[VerifyStore] scanCoupon', { code, found: !!coupon })
 
     if (coupon) {
+      set({ currentCoupon: coupon })
+
       if (coupon.status === 'expired') {
         set({
           exceptionInfo: {
@@ -97,6 +100,7 @@ export const useVerifyStore = create<VerifyState>((set, get) => ({
       }
     } else {
       set({
+        currentCoupon: null,
         exceptionInfo: {
           type: 'not_found',
           title: '未找到卡券',
@@ -109,17 +113,24 @@ export const useVerifyStore = create<VerifyState>((set, get) => ({
     }
 
     if (coupon && coupon.status === 'available') {
-      set({ currentCoupon: coupon })
+      set({ exceptionInfo: null })
     }
     return coupon
   },
 
   searchCouponByPhone: (phone) => {
     const { coupons } = get()
-    const result = coupons.filter(c =>
-      c.customerPhone.includes(phone) && c.status === 'available'
-    )
-    console.log('[VerifyStore] searchCouponByPhone', { phone, resultCount: result.length })
+    const cleanPhone = phone.replace(/\D/g, '')
+
+    const result = coupons.filter(c => {
+      const cleanCustomerPhone = c.customerPhone.replace(/\D/g, '')
+      if (cleanPhone.length === 4) {
+        return cleanCustomerPhone.endsWith(cleanPhone) && c.status === 'available'
+      }
+      return cleanCustomerPhone.includes(cleanPhone) && c.status === 'available'
+    })
+
+    console.log('[VerifyStore] searchCouponByPhone', { phone, cleanPhone, resultCount: result.length })
     return result
   },
 
@@ -131,6 +142,11 @@ export const useVerifyStore = create<VerifyState>((set, get) => ({
   getAppointmentById: (id) => {
     const { appointments } = get()
     return appointments.find(a => a.id === id) || null
+  },
+
+  getAppointmentByCouponId: (couponId) => {
+    const { appointments } = get()
+    return appointments.find(a => a.matchedCoupons?.includes(couponId)) || null
   },
 
   setCurrentCoupon: (coupon) => set({ currentCoupon: coupon }),
@@ -245,7 +261,7 @@ export const useVerifyStore = create<VerifyState>((set, get) => ({
 
     const updatedAppointments = appointments.map(a => {
       if (a.id === appointmentId) {
-        return { ...a, status: 'cancelled' as const, statusText: '已改约' }
+        return { ...a, status: 'rescheduled' as const, statusText: '已改约' }
       }
       return a
     })

@@ -8,7 +8,7 @@ import AppointmentCard from '@/components/AppointmentCard'
 import { Appointment, Coupon } from '@/types'
 import styles from './index.module.scss'
 
-type FilterType = 'all' | 'pending' | 'arrived' | 'completed' | 'cancelled' | 'warning'
+type FilterType = 'all' | 'pending' | 'arrived' | 'completed' | 'cancelled' | 'rescheduled' | 'warning'
 
 const AppointmentPage: React.FC = () => {
   const [filterType, setFilterType] = useState<FilterType>('all')
@@ -24,6 +24,7 @@ const AppointmentPage: React.FC = () => {
       total: todayAppointments.length,
       pending: todayAppointments.filter(a => a.status === 'pending').length,
       arrived: todayAppointments.filter(a => a.status === 'arrived').length,
+      rescheduled: todayAppointments.filter(a => a.status === 'rescheduled').length,
       warning: todayAppointments.filter(a =>
         a.notes?.includes('卡券') || a.status === 'pending' && (!a.matchedCoupons || a.matchedCoupons.length === 0)
       ).length
@@ -46,6 +47,9 @@ const AppointmentPage: React.FC = () => {
         break
       case 'cancelled':
         filtered = filtered.filter(a => a.status === 'cancelled')
+        break
+      case 'rescheduled':
+        filtered = filtered.filter(a => a.status === 'rescheduled')
         break
       case 'warning':
         filtered = filtered.filter(a =>
@@ -116,6 +120,7 @@ const AppointmentPage: React.FC = () => {
     { key: 'all', label: '全部', count: stats.total },
     { key: 'pending', label: '待到店', count: stats.pending },
     { key: 'arrived', label: '已到店', count: stats.arrived },
+    { key: 'rescheduled', label: '已改约', count: stats.rescheduled },
     { key: 'warning', label: '需关注', count: stats.warning }
   ]
 

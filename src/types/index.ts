@@ -1,6 +1,6 @@
 export type CouponStatus = 'available' | 'used' | 'expired' | 'frozen'
 export type CouponType = 'experience' | 'course' | 'gift'
-export type AppointmentStatus = 'pending' | 'arrived' | 'completed' | 'cancelled'
+export type AppointmentStatus = 'pending' | 'arrived' | 'completed' | 'cancelled' | 'rescheduled'
 export type VerifyStatus = 'success' | 'pending' | 'cancelled' | 'revoked'
 
 export interface Coupon {

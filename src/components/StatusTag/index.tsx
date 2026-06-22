@@ -6,7 +6,7 @@ import styles from './index.module.scss'
 interface StatusTagProps {
   text: string
   type: 'available' | 'used' | 'expired' | 'frozen' |
-        'pending' | 'arrived' | 'completed' | 'cancelled' |
+        'pending' | 'arrived' | 'completed' | 'cancelled' | 'rescheduled' |
         'success' | 'revoked' | 'experience' | 'course' | 'gift'
 }
 

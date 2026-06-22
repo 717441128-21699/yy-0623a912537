@@ -64,34 +64,48 @@ const VerifyPage: React.FC = () => {
     }
 
     if (searchType === 'code') {
-      const coupon = scanCoupon(searchValue.trim().toUpperCase())
+      const code = searchValue.trim().toUpperCase()
+      const coupon = scanCoupon(code)
       if (coupon) {
-        setSearchedCoupons([coupon])
-        setHasSearched(true)
-      } else if (exceptionInfo) {
-        Taro.navigateTo({ url: '/pages/exception/index' })
+        setCurrentCoupon(coupon)
+        Taro.navigateTo({ url: '/pages/verify-confirm/index' })
       } else {
-        setSearchedCoupons([])
-        setHasSearched(true)
+        setTimeout(() => {
+          const { exceptionInfo } = useVerifyStore.getState()
+          if (exceptionInfo) {
+            Taro.navigateTo({ url: '/pages/exception/index' })
+          } else {
+            setExceptionInfo({
+              type: 'not_found',
+              title: '未找到卡券',
+              reason: `未找到编号为 "${code}" 的卡券，请确认卡券编号是否正确`,
+              suggestion: '请检查卡券编号或尝试通过手机号查询',
+              canReschedule: false,
+              canRevoke: false
+            })
+            Taro.navigateTo({ url: '/pages/exception/index' })
+          }
+        }, 50)
       }
     } else {
-      const results = searchCouponByPhone(searchValue.trim())
+      const phone = searchValue.trim()
+      const results = searchCouponByPhone(phone)
       if (results.length > 0) {
         setSearchedCoupons(results)
+        setHasSearched(true)
       } else {
         setExceptionInfo({
           type: 'not_found',
           title: '未找到卡券',
-          reason: `未找到手机号为 "${searchValue}" 的可用卡券`,
+          reason: `未找到手机号 ${phone.length === 4 ? '后四位' : ''}为 "${phone}" 的可用卡券`,
           suggestion: '请检查手机号是否正确，或联系客户确认',
           canReschedule: false,
           canRevoke: false
         })
         Taro.navigateTo({ url: '/pages/exception/index' })
       }
-      setHasSearched(true)
     }
-  }, [searchType, searchValue, scanCoupon, searchCouponByPhone, exceptionInfo, setExceptionInfo])
+  }, [searchType, searchValue, scanCoupon, searchCouponByPhone, setCurrentCoupon, setExceptionInfo])
 
   const handleVerify = useCallback((coupon: Coupon) => {
     setCurrentCoupon(coupon)

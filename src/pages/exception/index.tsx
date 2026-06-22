@@ -7,9 +7,22 @@ import BottomActionBar from '@/components/BottomActionBar'
 import styles from './index.module.scss'
 
 const ExceptionPage: React.FC = () => {
-  const { exceptionInfo, currentCoupon, setExceptionInfo, rescheduleAppointment } = useVerifyStore()
+  const {
+    exceptionInfo,
+    currentCoupon,
+    setExceptionInfo,
+    rescheduleAppointment,
+    getAppointmentByCouponId
+  } = useVerifyStore()
   const [remark, setRemark] = useState('')
   const [processing, setProcessing] = useState(false)
+
+  const relatedAppointment = useMemo(() => {
+    if (currentCoupon) {
+      return getAppointmentByCouponId(currentCoupon.id)
+    }
+    return null
+  }, [currentCoupon, getAppointmentByCouponId])
 
   const exceptionIcon = useMemo(() => {
     const iconMap: Record<string, string> = {
@@ -22,15 +35,21 @@ const ExceptionPage: React.FC = () => {
   }, [exceptionInfo])
 
   const handleReschedule = useCallback(() => {
+    const appointmentToReschedule = relatedAppointment
+    if (!appointmentToReschedule) {
+      Taro.showToast({ title: '未找到关联预约', icon: 'none' })
+      return
+    }
+
     Taro.showModal({
       title: '改约确认',
-      content: '确定要为客户改约吗？改约后将保留卡券，客户可下次再来使用。',
+      content: `确定要为 ${currentCoupon?.customerName} 改约吗？改约后将保留卡券，客户可下次再来使用。`,
       confirmText: '确认改约',
       success: (res) => {
         if (res.confirm) {
           setProcessing(true)
           setTimeout(() => {
-            const success = rescheduleAppointment(currentCoupon?.id || '')
+            const success = rescheduleAppointment(appointmentToReschedule.id)
             setProcessing(false)
             if (success) {
               Taro.showToast({ title: '改约成功', icon: 'success' })
@@ -45,7 +64,7 @@ const ExceptionPage: React.FC = () => {
         }
       }
     })
-  }, [currentCoupon, rescheduleAppointment, setExceptionInfo])
+  }, [currentCoupon, relatedAppointment, rescheduleAppointment, setExceptionInfo])
 
   const handleContactAdmin = useCallback(() => {
     Taro.showModal({
@@ -138,6 +157,14 @@ const ExceptionPage: React.FC = () => {
                   </Text>
                 </View>
               </View>
+              {relatedAppointment && (
+                <View className={styles.infoRow}>
+                  <Text className={styles.infoLabel}>关联预约</Text>
+                  <Text className={styles.infoValue}>
+                    {relatedAppointment.itemName} · {relatedAppointment.appointmentTime}
+                  </Text>
+                </View>
+              )}
               {exceptionInfo.type === 'expired' && (
                 <View className={styles.infoRow}>
                   <Text className={styles.infoLabel}>有效期至</Text>
@@ -212,7 +239,7 @@ const ExceptionPage: React.FC = () => {
       </View>
 
       <View className={styles.actionButtons}>
-        {exceptionInfo.canReschedule && (
+        {exceptionInfo.canReschedule && relatedAppointment && (
           <View
             className={`${styles.actionBtn} ${styles.warning}`}
             onClick={!processing ? handleReschedule : undefined}

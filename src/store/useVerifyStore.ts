@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { Coupon, Appointment, VerifyRecord, VerifyFormData, ExceptionInfo } from '@/types'
+import { Coupon, Appointment, VerifyRecord, VerifyFormData, ExceptionInfo, FollowUpRecord, FollowUpType } from '@/types'
 import { mockCoupons } from '@/data/coupons'
 import { mockAppointments } from '@/data/appointments'
 import { mockRecords, mockShiftSummary } from '@/data/records'
@@ -9,6 +9,7 @@ interface VerifyState {
   coupons: Coupon[]
   appointments: Appointment[]
   records: VerifyRecord[]
+  followUpRecords: FollowUpRecord[]
   currentCoupon: Coupon | null
   currentAppointment: Appointment | null
   currentRecord: VerifyRecord | null
@@ -24,13 +25,17 @@ interface VerifyState {
   getCouponById: (id: string) => Coupon | null
   getAppointmentById: (id: string) => Appointment | null
   getAppointmentByCouponId: (couponId: string) => Appointment | null
+  getVerifyRecordByAppointmentId: (appointmentId: string) => VerifyRecord | null
+  getFollowUpRecordsByAppointmentId: (appointmentId: string) => FollowUpRecord[]
   setCurrentCoupon: (coupon: Coupon | null) => void
   setCurrentAppointment: (appointment: Appointment | null) => void
   setVerifyFormData: (data: Partial<VerifyFormData>) => void
   submitVerify: () => VerifyRecord | null
   setExceptionInfo: (info: ExceptionInfo | null) => void
+  addFollowUpRecord: (params: { relatedCouponId?: string; relatedAppointmentId?: string; type: FollowUpType; remark: string; result: string }) => void
   revokeVerify: (recordId: string) => boolean
   rescheduleAppointment: (appointmentId: string) => boolean
+  updateAppointmentStatus: (appointmentId: string, status: Appointment['status'], statusText: string, extra?: Partial<Appointment>) => void
   closeShift: () => boolean
   getTodayStats: () => { total: number; success: number; pending: number; exception: number }
   getMatchedCoupons: (appointmentId: string) => Coupon[]
@@ -40,6 +45,7 @@ export const useVerifyStore = create<VerifyState>((set, get) => ({
   coupons: mockCoupons,
   appointments: mockAppointments,
   records: mockRecords,
+  followUpRecords: [],
   currentCoupon: null,
   currentAppointment: null,
   currentRecord: null,
@@ -149,6 +155,18 @@ export const useVerifyStore = create<VerifyState>((set, get) => ({
     return appointments.find(a => a.matchedCoupons?.includes(couponId)) || null
   },
 
+  getVerifyRecordByAppointmentId: (appointmentId) => {
+    const { appointments, records } = get()
+    const appointment = appointments.find(a => a.id === appointmentId)
+    if (!appointment || !appointment.verifyRecordId) return null
+    return records.find(r => r.id === appointment.verifyRecordId) || null
+  },
+
+  getFollowUpRecordsByAppointmentId: (appointmentId) => {
+    const { followUpRecords } = get()
+    return followUpRecords.filter(r => r.relatedAppointmentId === appointmentId)
+  },
+
   setCurrentCoupon: (coupon) => set({ currentCoupon: coupon }),
 
   setCurrentAppointment: (appointment) => set({ currentAppointment: appointment }),
@@ -158,7 +176,7 @@ export const useVerifyStore = create<VerifyState>((set, get) => ({
   }),
 
   submitVerify: () => {
-    const { currentCoupon, verifyFormData, coupons, records, shiftSummary } = get()
+    const { currentCoupon, verifyFormData, coupons, records, shiftSummary, appointments } = get()
     if (!currentCoupon) return null
 
     console.log('[VerifyStore] submitVerify', {
@@ -166,6 +184,7 @@ export const useVerifyStore = create<VerifyState>((set, get) => ({
       formData: verifyFormData
     })
 
+    const now = new Date().toISOString()
     const newRecord: VerifyRecord = {
       id: generateVerifyId(),
       couponId: currentCoupon.id,
@@ -182,7 +201,7 @@ export const useVerifyStore = create<VerifyState>((set, get) => ({
       operatorName: '前台小王',
       status: 'success',
       statusText: '核销成功',
-      verifyTime: new Date().toISOString(),
+      verifyTime: now,
       electronicVoucher: generateVoucherNo(),
       notes: verifyFormData.notes
     }
@@ -201,6 +220,19 @@ export const useVerifyStore = create<VerifyState>((set, get) => ({
       return c
     })
 
+    const updatedAppointments = appointments.map(a => {
+      if (a.matchedCoupons?.includes(currentCoupon.id) && (a.status === 'pending' || a.status === 'arrived')) {
+        return {
+          ...a,
+          status: 'completed' as const,
+          statusText: '已核销',
+          verifyRecordId: newRecord.id,
+          completeTime: now
+        }
+      }
+      return a
+    })
+
     const updatedShiftSummary = {
       ...shiftSummary,
       totalVerifyCount: shiftSummary.totalVerifyCount + 1
@@ -209,6 +241,7 @@ export const useVerifyStore = create<VerifyState>((set, get) => ({
     set({
       records: [newRecord, ...records],
       coupons: updatedCoupons,
+      appointments: updatedAppointments,
       currentRecord: newRecord,
       shiftSummary: updatedShiftSummary,
       currentCoupon: null,
@@ -220,8 +253,24 @@ export const useVerifyStore = create<VerifyState>((set, get) => ({
 
   setExceptionInfo: (info) => set({ exceptionInfo: info }),
 
+  addFollowUpRecord: (params) => {
+    const { followUpRecords } = get()
+    const newRecord: FollowUpRecord = {
+      id: `fu${Date.now()}`,
+      relatedCouponId: params.relatedCouponId,
+      relatedAppointmentId: params.relatedAppointmentId,
+      type: params.type,
+      handlerName: '前台小王',
+      handleTime: new Date().toISOString(),
+      remark: params.remark,
+      result: params.result
+    }
+    set({ followUpRecords: [...followUpRecords, newRecord] })
+    return newRecord
+  },
+
   revokeVerify: (recordId) => {
-    const { records, coupons } = get()
+    const { records, coupons, appointments } = get()
     const record = records.find(r => r.id === recordId)
     if (!record || record.status !== 'success') return false
 
@@ -248,7 +297,20 @@ export const useVerifyStore = create<VerifyState>((set, get) => ({
       return c
     })
 
-    set({ records: updatedRecords, coupons: updatedCoupons })
+    const updatedAppointments = appointments.map(a => {
+      if (a.verifyRecordId === recordId) {
+        return {
+          ...a,
+          status: 'arrived' as const,
+          statusText: '已到店',
+          verifyRecordId: undefined,
+          completeTime: undefined
+        }
+      }
+      return a
+    })
+
+    set({ records: updatedRecords, coupons: updatedCoupons, appointments: updatedAppointments })
     return true
   },
 
@@ -268,6 +330,17 @@ export const useVerifyStore = create<VerifyState>((set, get) => ({
 
     set({ appointments: updatedAppointments })
     return true
+  },
+
+  updateAppointmentStatus: (appointmentId, status, statusText, extra) => {
+    const { appointments } = get()
+    const updatedAppointments = appointments.map(a => {
+      if (a.id === appointmentId) {
+        return { ...a, ...extra, status, statusText }
+      }
+      return a
+    })
+    set({ appointments: updatedAppointments })
   },
 
   closeShift: () => {

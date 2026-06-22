@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react'
 import { View, Text, Textarea } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useVerifyStore } from '@/store/useVerifyStore'
-import { formatDate } from '@/utils'
+import { formatDate, formatDateTime } from '@/utils'
 import BottomActionBar from '@/components/BottomActionBar'
 import styles from './index.module.scss'
 
@@ -12,7 +12,9 @@ const ExceptionPage: React.FC = () => {
     currentCoupon,
     setExceptionInfo,
     rescheduleAppointment,
-    getAppointmentByCouponId
+    getAppointmentByCouponId,
+    addFollowUpRecord,
+    getFollowUpRecordsByAppointmentId
   } = useVerifyStore()
   const [remark, setRemark] = useState('')
   const [processing, setProcessing] = useState(false)
@@ -23,6 +25,13 @@ const ExceptionPage: React.FC = () => {
     }
     return null
   }, [currentCoupon, getAppointmentByCouponId])
+
+  const followUpRecords = useMemo(() => {
+    if (relatedAppointment) {
+      return getFollowUpRecordsByAppointmentId(relatedAppointment.id)
+    }
+    return []
+  }, [relatedAppointment, getFollowUpRecordsByAppointmentId])
 
   const exceptionIcon = useMemo(() => {
     const iconMap: Record<string, string> = {
@@ -52,6 +61,13 @@ const ExceptionPage: React.FC = () => {
             const success = rescheduleAppointment(appointmentToReschedule.id)
             setProcessing(false)
             if (success) {
+              addFollowUpRecord({
+                relatedCouponId: currentCoupon?.id,
+                relatedAppointmentId: appointmentToReschedule.id,
+                type: 'reschedule',
+                remark: remark || '客户改约保留',
+                result: '预约状态已更新为已改约，卡券保留'
+              })
               Taro.showToast({ title: '改约成功', icon: 'success' })
               setTimeout(() => {
                 setExceptionInfo(null)
@@ -64,7 +80,7 @@ const ExceptionPage: React.FC = () => {
         }
       }
     })
-  }, [currentCoupon, relatedAppointment, rescheduleAppointment, setExceptionInfo])
+  }, [currentCoupon, relatedAppointment, rescheduleAppointment, setExceptionInfo, remark, addFollowUpRecord])
 
   const handleContactAdmin = useCallback(() => {
     Taro.showModal({
@@ -73,6 +89,13 @@ const ExceptionPage: React.FC = () => {
       confirmText: '拨打',
       success: (res) => {
         if (res.confirm) {
+          addFollowUpRecord({
+            relatedCouponId: currentCoupon?.id,
+            relatedAppointmentId: relatedAppointment?.id,
+            type: 'contact_admin',
+            remark: remark || '联系管理员处理卡券异常',
+            result: '已拨打管理员电话'
+          })
           Taro.makePhoneCall({
             phoneNumber: '400-123-4567',
             fail: () => {
@@ -82,7 +105,7 @@ const ExceptionPage: React.FC = () => {
         }
       }
     })
-  }, [])
+  }, [currentCoupon, relatedAppointment, remark, addFollowUpRecord])
 
   const handleSubmitIssue = useCallback(() => {
     if (!remark.trim()) {
@@ -91,6 +114,13 @@ const ExceptionPage: React.FC = () => {
     }
     setProcessing(true)
     setTimeout(() => {
+      addFollowUpRecord({
+        relatedCouponId: currentCoupon?.id,
+        relatedAppointmentId: relatedAppointment?.id,
+        type: 'submit_issue',
+        remark: remark,
+        result: '问题已提交，等待处理'
+      })
       setProcessing(false)
       Taro.showToast({ title: '问题已提交', icon: 'success' })
       setTimeout(() => {
@@ -98,12 +128,22 @@ const ExceptionPage: React.FC = () => {
         Taro.switchTab({ url: '/pages/verify/index' })
       }, 1500)
     }, 1000)
-  }, [remark, setExceptionInfo])
+  }, [remark, setExceptionInfo, currentCoupon, relatedAppointment, addFollowUpRecord])
 
   const handleGoBack = useCallback(() => {
     setExceptionInfo(null)
     Taro.switchTab({ url: '/pages/verify/index' })
   }, [setExceptionInfo])
+
+  const getFollowUpTypeLabel = (type: string) => {
+    const labelMap: Record<string, string> = {
+      reschedule: '改约保留',
+      contact_admin: '联系管理员',
+      submit_issue: '提交问题',
+      other: '其他处理'
+    }
+    return labelMap[type] || type
+  }
 
   if (!exceptionInfo) {
     return (
@@ -220,10 +260,38 @@ const ExceptionPage: React.FC = () => {
         </View>
       </View>
 
+      {followUpRecords.length > 0 && (
+        <View className={styles.infoSection}>
+          <Text className={styles.sectionTitle}>
+            <Text className={styles.sectionIcon}>📝</Text>
+            历史跟进
+          </Text>
+          <View className={styles.infoCard}>
+            {followUpRecords.map((record, index) => (
+              <View key={record.id} className={styles.followUpItem}>
+                <View className={styles.followUpLeft}>
+                  <View className={styles.followUpDot} />
+                  {index < followUpRecords.length - 1 && <View className={styles.followUpLine} />}
+                </View>
+                <View className={styles.followUpContent}>
+                  <View className={styles.followUpHeader}>
+                    <Text className={styles.followUpType}>{getFollowUpTypeLabel(record.type)}</Text>
+                    <Text className={styles.followUpTime}>{formatDateTime(record.handleTime)}</Text>
+                  </View>
+                  <Text className={styles.followUpHandler}>处理人：{record.handlerName}</Text>
+                  <Text className={styles.followUpRemark}>{record.remark}</Text>
+                  <Text className={styles.followUpResult}>{record.result}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+      )}
+
       <View className={styles.infoSection}>
         <Text className={styles.sectionTitle}>
           <Text className={styles.sectionIcon}>📝</Text>
-          问题说明（选填）
+          处理备注（选填）
         </Text>
         <View className={styles.actionCard}>
           <View className={styles.remarkInputWrapper}>

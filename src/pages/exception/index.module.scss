@@ -266,3 +266,76 @@
   margin-right: $spacing-sm;
   font-size: $font-size-lg;
 }
+
+.followUpItem {
+  display: flex;
+  min-height: 80rpx;
+}
+
+.followUpLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 36rpx;
+  flex-shrink: 0;
+  margin-right: $spacing-md;
+}
+
+.followUpDot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background: $color-warning;
+  flex-shrink: 0;
+  margin-top: 8rpx;
+}
+
+.followUpLine {
+  width: 4rpx;
+  flex: 1;
+  min-height: 24rpx;
+  background: #E5E6EB;
+}
+
+.followUpContent {
+  flex: 1;
+  padding-bottom: $spacing-md;
+}
+
+.followUpHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4rpx;
+}
+
+.followUpType {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.followUpTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.followUpHandler {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  margin-bottom: 4rpx;
+  display: block;
+}
+
+.followUpRemark {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  display: block;
+}
+
+.followUpResult {
+  font-size: $font-size-xs;
+  color: $color-success;
+  display: block;
+  margin-top: 4rpx;
+}

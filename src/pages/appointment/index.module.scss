@@ -28,6 +28,7 @@
   gap: $spacing-md;
   padding: 0 $page-padding;
   margin-bottom: $spacing-lg;
+  flex-wrap: wrap;
 }
 
 .filterSection {
@@ -155,6 +156,40 @@
   font-size: $font-size-md;
   font-weight: $font-weight-semibold;
   color: $color-text-primary;
+}
+
+.timeGroupIndicators {
+  display: flex;
+  gap: $spacing-xs;
+  margin-left: $spacing-md;
+}
+
+.indicator {
+  display: inline-block;
+  padding: 2rpx 12rpx;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+}
+
+.indicatorPending {
+  background: rgba(255, 125, 0, 0.1);
+  color: #FF7D00;
+}
+
+.indicatorArrived {
+  background: rgba(0, 180, 42, 0.1);
+  color: #00B42A;
+}
+
+.indicatorCompleted {
+  background: rgba(22, 119, 255, 0.1);
+  color: #1677FF;
+}
+
+.indicatorException {
+  background: rgba(245, 63, 63, 0.1);
+  color: #F53F3F;
 }
 
 .empty {

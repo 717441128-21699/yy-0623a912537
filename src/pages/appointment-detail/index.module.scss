@@ -42,6 +42,10 @@
   &.cancelled {
     background: rgba(134, 144, 156, 0.9);
   }
+
+  &.rescheduled {
+    background: rgba(255, 125, 0, 0.9);
+  }
 }
 
 .timeText {
@@ -342,4 +346,170 @@
   font-size: $font-size-sm;
   color: $color-text-primary;
   font-weight: $font-weight-medium;
+}
+
+.progressTrack {
+  padding: $spacing-sm 0;
+}
+
+.progressStep {
+  display: flex;
+  min-height: 80rpx;
+}
+
+.progressLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 48rpx;
+  flex-shrink: 0;
+  margin-right: $spacing-md;
+}
+
+.progressDot {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  &.done {
+    background: $color-success;
+  }
+
+  &.current {
+    background: $color-primary;
+  }
+
+  &.waiting {
+    background: #E5E6EB;
+  }
+}
+
+.dotCheck {
+  font-size: 20rpx;
+  color: #fff;
+}
+
+.dotActive {
+  font-size: 20rpx;
+  color: #fff;
+}
+
+.progressLine {
+  width: 4rpx;
+  flex: 1;
+  min-height: 24rpx;
+
+  &.lineDone {
+    background: $color-success;
+  }
+
+  &.lineWaiting {
+    background: #E5E6EB;
+  }
+}
+
+.progressContent {
+  padding-top: 4rpx;
+  padding-bottom: $spacing-md;
+}
+
+.progressLabel {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.progressLabelWaiting {
+  color: $color-text-tertiary;
+}
+
+.progressTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.verifySummaryCard {
+  background: linear-gradient(135deg, rgba(0, 180, 42, 0.05) 0%, rgba(0, 180, 42, 0.02) 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border: 2rpx solid rgba(0, 180, 42, 0.2);
+}
+
+.followUpItem {
+  display: flex;
+  min-height: 80rpx;
+}
+
+.followUpLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 36rpx;
+  flex-shrink: 0;
+  margin-right: $spacing-md;
+}
+
+.followUpDot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background: $color-warning;
+  flex-shrink: 0;
+  margin-top: 8rpx;
+}
+
+.followUpLine {
+  width: 4rpx;
+  flex: 1;
+  min-height: 24rpx;
+  background: #E5E6EB;
+}
+
+.followUpContent {
+  flex: 1;
+  padding-bottom: $spacing-md;
+}
+
+.followUpHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4rpx;
+}
+
+.followUpType {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.followUpTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.followUpHandler {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  margin-bottom: 4rpx;
+  display: block;
+}
+
+.followUpRemark {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  display: block;
+}
+
+.followUpResult {
+  font-size: $font-size-xs;
+  color: $color-success;
+  display: block;
+  margin-top: 4rpx;
 }

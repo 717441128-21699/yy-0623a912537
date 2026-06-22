@@ -2,6 +2,7 @@ export type CouponStatus = 'available' | 'used' | 'expired' | 'frozen'
 export type CouponType = 'experience' | 'course' | 'gift'
 export type AppointmentStatus = 'pending' | 'arrived' | 'completed' | 'cancelled' | 'rescheduled'
 export type VerifyStatus = 'success' | 'pending' | 'cancelled' | 'revoked'
+export type FollowUpType = 'reschedule' | 'contact_admin' | 'submit_issue' | 'other'
 
 export interface Coupon {
   id: string
@@ -39,6 +40,8 @@ export interface Appointment {
   statusText: string
   matchedCoupons?: string[]
   arriveTime?: string
+  completeTime?: string
+  verifyRecordId?: string
   notes?: string
 }
 
@@ -95,6 +98,17 @@ export interface ExceptionInfo {
   suggestion: string
   canReschedule: boolean
   canRevoke: boolean
+}
+
+export interface FollowUpRecord {
+  id: string
+  relatedCouponId?: string
+  relatedAppointmentId?: string
+  type: FollowUpType
+  handlerName: string
+  handleTime: string
+  remark: string
+  result: string
 }
 
 export interface Doctor {

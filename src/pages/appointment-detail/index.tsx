@@ -4,7 +4,7 @@ import Taro, { useRouter, useDidShow } from '@tarojs/taro'
 import { useVerifyStore } from '@/store/useVerifyStore'
 import { formatDateTime, formatPhone, getExpireDaysText } from '@/utils'
 import BottomActionBar from '@/components/BottomActionBar'
-import { Appointment } from '@/types'
+import { Appointment, FollowUpRecord, VerifyRecord } from '@/types'
 import styles from './index.module.scss'
 
 const AppointmentDetailPage: React.FC = () => {
@@ -16,7 +16,11 @@ const AppointmentDetailPage: React.FC = () => {
     searchCouponByPhone,
     getAppointmentById,
     setCurrentAppointment,
-    rescheduleAppointment
+    rescheduleAppointment,
+    updateAppointmentStatus,
+    getVerifyRecordByAppointmentId,
+    getFollowUpRecordsByAppointmentId,
+    addFollowUpRecord
   } = useVerifyStore()
 
   const [localAppointment, setLocalAppointment] = useState<Appointment | null>(null)
@@ -40,11 +44,25 @@ const AppointmentDetailPage: React.FC = () => {
 
   useDidShow(() => {
     if (router.params.id) {
-      loadAppointment()
+      const apt = getAppointmentById(router.params.id)
+      if (apt) {
+        setLocalAppointment(apt)
+        setCurrentAppointment(apt)
+      }
     }
   })
 
   const appointment = localAppointment || currentAppointment
+
+  const verifyRecord = useMemo(() => {
+    if (!appointment) return null
+    return getVerifyRecordByAppointmentId(appointment.id)
+  }, [appointment, getVerifyRecordByAppointmentId])
+
+  const followUpRecords = useMemo(() => {
+    if (!appointment) return []
+    return getFollowUpRecordsByAppointmentId(appointment.id)
+  }, [appointment, getFollowUpRecordsByAppointmentId])
 
   const matchedCoupons = useMemo(() => {
     if (!appointment) return []
@@ -58,6 +76,32 @@ const AppointmentDetailPage: React.FC = () => {
       c => !matchedCoupons.find(mc => mc.id === c.id)
     )
   }, [appointment, matchedCoupons, searchCouponByPhone])
+
+  const progressSteps = useMemo(() => {
+    if (!appointment) return []
+    const steps = [
+      { label: '预约创建', status: 'done' as const, time: appointment.appointmentTime },
+    ]
+    if (appointment.status === 'pending') {
+      steps.push({ label: '待到店', status: 'current' as const, time: '' })
+      steps.push({ label: '核销确认', status: 'waiting' as const, time: '' });
+      steps.push({ label: '核销完成', status: 'waiting' as const, time: '' })
+    } else if (appointment.status === 'arrived') {
+      steps.push({ label: '已到店', status: 'done' as const, time: appointment.arriveTime || '' });
+      steps.push({ label: '核销确认', status: 'current' as const, time: '' });
+      steps.push({ label: '核销完成', status: 'waiting' as const, time: '' })
+    } else if (appointment.status === 'completed') {
+      steps.push({ label: '已到店', status: 'done' as const, time: appointment.arriveTime || '' });
+      steps.push({ label: '核销确认', status: 'done' as const, time: '' });
+      steps.push({ label: '已核销', status: 'done' as const, time: appointment.completeTime || '' })
+    } else if (appointment.status === 'rescheduled') {
+      steps.push({ label: '已改约', status: 'done' as const, time: '' });
+      steps.push({ label: '等待重新预约', status: 'waiting' as const, time: '' })
+    } else if (appointment.status === 'cancelled') {
+      steps.push({ label: '已取消', status: 'done' as const, time: '' })
+    }
+    return steps
+  }, [appointment])
 
   const handleCallPhone = useCallback((phone: string) => {
     Taro.makePhoneCall({
@@ -81,14 +125,16 @@ const AppointmentDetailPage: React.FC = () => {
       confirmText: '确认到店',
       success: (res) => {
         if (res.confirm) {
-          const updatedApt = { ...appointment, status: 'arrived' as const, statusText: '已到店' }
+          const now = new Date().toISOString()
+          updateAppointmentStatus(appointment.id, 'arrived', '已到店', { arriveTime: now })
+          const updatedApt = { ...appointment, status: 'arrived' as const, statusText: '已到店', arriveTime: now }
           setLocalAppointment(updatedApt)
           setCurrentAppointment(updatedApt)
           Taro.showToast({ title: '已标记到店', icon: 'success' })
         }
       }
     })
-  }, [appointment, setCurrentAppointment])
+  }, [appointment, setCurrentAppointment, updateAppointmentStatus])
 
   const handleReschedule = useCallback(() => {
     if (!appointment) return
@@ -100,6 +146,12 @@ const AppointmentDetailPage: React.FC = () => {
         if (res.confirm) {
           const success = rescheduleAppointment(appointment.id)
           if (success) {
+            addFollowUpRecord({
+              relatedAppointmentId: appointment.id,
+              type: 'reschedule',
+              remark: '客户改约保留',
+              result: '预约状态已更新为已改约'
+            })
             const updatedApt = { ...appointment, status: 'rescheduled' as const, statusText: '已改约' }
             setLocalAppointment(updatedApt)
             setCurrentAppointment(updatedApt)
@@ -111,7 +163,7 @@ const AppointmentDetailPage: React.FC = () => {
         }
       }
     })
-  }, [appointment, rescheduleAppointment, setCurrentAppointment])
+  }, [appointment, rescheduleAppointment, setCurrentAppointment, addFollowUpRecord])
 
   const handleCancel = useCallback(() => {
     if (!appointment) return
@@ -122,6 +174,7 @@ const AppointmentDetailPage: React.FC = () => {
       confirmColor: '#F53F3F',
       success: (res) => {
         if (res.confirm) {
+          updateAppointmentStatus(appointment.id, 'cancelled', '已取消')
           const updatedApt = { ...appointment, status: 'cancelled' as const, statusText: '已取消' }
           setLocalAppointment(updatedApt)
           setCurrentAppointment(updatedApt)
@@ -130,7 +183,7 @@ const AppointmentDetailPage: React.FC = () => {
         }
       }
     })
-  }, [appointment, setCurrentAppointment])
+  }, [appointment, setCurrentAppointment, updateAppointmentStatus])
 
   const getCouponTypeClass = (type: string) => {
     const classMap: Record<string, string> = {
@@ -156,9 +209,19 @@ const AppointmentDetailPage: React.FC = () => {
       arrived: 'arrived',
       completed: 'completed',
       cancelled: 'cancelled',
-      rescheduled: 'cancelled'
+      rescheduled: 'rescheduled'
     }
     return classMap[status] || ''
+  }
+
+  const getFollowUpTypeLabel = (type: string) => {
+    const labelMap: Record<string, string> = {
+      reschedule: '改约保留',
+      contact_admin: '联系管理员',
+      submit_issue: '提交问题',
+      other: '其他处理'
+    }
+    return labelMap[type] || type
   }
 
   if (!appointment) {
@@ -199,7 +262,41 @@ const AppointmentDetailPage: React.FC = () => {
       <View className={styles.infoSection}>
         <Text className={styles.sectionTitle}>
           <Text className={styles.sectionTitleText}>
-            <Text className={styles.sectionIcon}>👤</Text>
+            <Text className={styles.sectionIcon}>�</Text>
+            办理进度
+          </Text>
+        </Text>
+        <View className={styles.infoCard}>
+          <View className={styles.progressTrack}>
+            {progressSteps.map((step, index) => (
+              <View key={index} className={styles.progressStep}>
+                <View className={styles.progressLeft}>
+                  <View className={`${styles.progressDot} ${styles[step.status]}`}>
+                    {step.status === 'done' && <Text className={styles.dotCheck}>✓</Text>}
+                    {step.status === 'current' && <Text className={styles.dotActive}>●</Text>}
+                  </View>
+                  {index < progressSteps.length - 1 && (
+                    <View className={`${styles.progressLine} ${styles[step.status === 'done' ? 'lineDone' : 'lineWaiting']}`} />
+                  )}
+                </View>
+                <View className={styles.progressContent}>
+                  <Text className={`${styles.progressLabel} ${step.status === 'waiting' ? styles.progressLabelWaiting : ''}`}>
+                    {step.label}
+                  </Text>
+                  {step.time && (
+                    <Text className={styles.progressTime}>{formatDateTime(step.time)}</Text>
+                  )}
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+      </View>
+
+      <View className={styles.infoSection}>
+        <Text className={styles.sectionTitle}>
+          <Text className={styles.sectionTitleText}>
+            <Text className={styles.sectionIcon}>�👤</Text>
             客户信息
           </Text>
         </Text>
@@ -223,7 +320,13 @@ const AppointmentDetailPage: React.FC = () => {
           {appointment.arriveTime && (
             <View className={styles.infoRow}>
               <Text className={styles.infoLabel}>到店时间</Text>
-              <Text className={styles.infoValue}>{appointment.arriveTime}</Text>
+              <Text className={styles.infoValue}>{formatDateTime(appointment.arriveTime)}</Text>
+            </View>
+          )}
+          {appointment.completeTime && (
+            <View className={styles.infoRow}>
+              <Text className={styles.infoLabel}>核销时间</Text>
+              <Text className={styles.infoValue}>{formatDateTime(appointment.completeTime)}</Text>
             </View>
           )}
           {appointment.notes && (
@@ -234,6 +337,43 @@ const AppointmentDetailPage: React.FC = () => {
           )}
         </View>
       </View>
+
+      {verifyRecord && (
+        <View className={styles.infoSection}>
+          <Text className={styles.sectionTitle}>
+            <Text className={styles.sectionTitleText}>
+              <Text className={styles.sectionIcon}>✅</Text>
+              核销摘要
+            </Text>
+          </Text>
+          <View className={styles.verifySummaryCard}>
+            <View className={styles.infoRow}>
+              <Text className={styles.infoLabel}>卡券名称</Text>
+              <Text className={styles.infoValue}>{verifyRecord.couponName}</Text>
+            </View>
+            <View className={styles.infoRow}>
+              <Text className={styles.infoLabel}>核销项目</Text>
+              <Text className={styles.infoValue}>{verifyRecord.itemName} · {verifyRecord.itemPart}</Text>
+            </View>
+            <View className={styles.infoRow}>
+              <Text className={styles.infoLabel}>核销次数</Text>
+              <Text className={styles.infoValue}>{verifyRecord.verifyCount} 次</Text>
+            </View>
+            <View className={styles.infoRow}>
+              <Text className={styles.infoLabel}>主治医生</Text>
+              <Text className={styles.infoValue}>{verifyRecord.doctorName}</Text>
+            </View>
+            <View className={styles.infoRow}>
+              <Text className={styles.infoLabel}>治疗室</Text>
+              <Text className={styles.infoValue}>{verifyRecord.roomNo}</Text>
+            </View>
+            <View className={styles.infoRow}>
+              <Text className={styles.infoLabel}>凭证号</Text>
+              <Text className={styles.infoValue}>{verifyRecord.electronicVoucher}</Text>
+            </View>
+          </View>
+        </View>
+      )}
 
       <View className={styles.infoSection}>
         <Text className={styles.sectionTitle}>
@@ -370,19 +510,52 @@ const AppointmentDetailPage: React.FC = () => {
         </View>
       )}
 
+      {followUpRecords.length > 0 && (
+        <View className={styles.infoSection}>
+          <Text className={styles.sectionTitle}>
+            <Text className={styles.sectionTitleText}>
+              <Text className={styles.sectionIcon}>📝</Text>
+              跟进记录
+            </Text>
+            <Text className={`${styles.sectionBadge} ${styles.warning}`}>
+              {followUpRecords.length} 条
+            </Text>
+          </Text>
+          <View className={styles.infoCard}>
+            {followUpRecords.map((record, index) => (
+              <View key={record.id} className={styles.followUpItem}>
+                <View className={styles.followUpLeft}>
+                  <View className={styles.followUpDot} />
+                  {index < followUpRecords.length - 1 && <View className={styles.followUpLine} />}
+                </View>
+                <View className={styles.followUpContent}>
+                  <View className={styles.followUpHeader}>
+                    <Text className={styles.followUpType}>{getFollowUpTypeLabel(record.type)}</Text>
+                    <Text className={styles.followUpTime}>{formatDateTime(record.handleTime)}</Text>
+                  </View>
+                  <Text className={styles.followUpHandler}>处理人：{record.handlerName}</Text>
+                  <Text className={styles.followUpRemark}>{record.remark}</Text>
+                  <Text className={styles.followUpResult}>{record.result}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+      )}
+
       <BottomActionBar
         actions={[
           {
             text: '改约',
             type: 'secondary',
             onClick: handleReschedule,
-            disabled: appointment.status === 'cancelled' || appointment.status === 'rescheduled'
+            disabled: appointment.status === 'cancelled' || appointment.status === 'rescheduled' || appointment.status === 'completed'
           },
           {
             text: '取消预约',
             type: 'danger',
             onClick: handleCancel,
-            disabled: appointment.status === 'cancelled' || appointment.status === 'rescheduled'
+            disabled: appointment.status === 'cancelled' || appointment.status === 'rescheduled' || appointment.status === 'completed'
           },
           {
             text: '标记到店',

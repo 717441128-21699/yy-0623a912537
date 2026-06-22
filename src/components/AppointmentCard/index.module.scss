@@ -161,3 +161,13 @@
 .arrived {
   border-left: 6rpx solid $color-primary;
 }
+
+.completed {
+  border-left: 6rpx solid $color-success;
+  background: linear-gradient(135deg, rgba(0, 180, 42, 0.03) 0%, rgba(0, 180, 42, 0.01) 100%);
+}
+
+.rescheduled {
+  border-left: 6rpx solid $color-warning;
+  background: linear-gradient(135deg, rgba(255, 125, 0, 0.03) 0%, rgba(255, 125, 0, 0.01) 100%);
+}

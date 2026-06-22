@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import { useVerifyStore } from '@/store/useVerifyStore'
 import StatCard from '@/components/StatCard'
 import AppointmentCard from '@/components/AppointmentCard'
-import { Appointment, Coupon } from '@/types'
+import { Appointment } from '@/types'
 import styles from './index.module.scss'
 
 type FilterType = 'all' | 'pending' | 'arrived' | 'completed' | 'cancelled' | 'rescheduled' | 'warning'
@@ -24,9 +24,10 @@ const AppointmentPage: React.FC = () => {
       total: todayAppointments.length,
       pending: todayAppointments.filter(a => a.status === 'pending').length,
       arrived: todayAppointments.filter(a => a.status === 'arrived').length,
+      completed: todayAppointments.filter(a => a.status === 'completed').length,
       rescheduled: todayAppointments.filter(a => a.status === 'rescheduled').length,
-      warning: todayAppointments.filter(a =>
-        a.notes?.includes('卡券') || a.status === 'pending' && (!a.matchedCoupons || a.matchedCoupons.length === 0)
+      exception: todayAppointments.filter(a =>
+        a.notes?.includes('卡券') && a.status === 'pending'
       ).length
     }
   }, [appointments])
@@ -65,13 +66,35 @@ const AppointmentPage: React.FC = () => {
   const groupedAppointments = useMemo(() => {
     const groups: Record<string, Appointment[]> = {}
     todayAppointments.forEach(apt => {
-      const hour = apt.appointmentTime.split(' ')[1].split(':')[0]
-      const key = `${hour}:00-${parseInt(hour) + 1}:00`
+      const timeParts = apt.appointmentTime.split(' ')[1].split(':')
+      const hour = parseInt(timeParts[0])
+      let period: string
+      if (hour < 12) {
+        period = '上午'
+      } else if (hour < 18) {
+        period = '下午'
+      } else {
+        period = '晚间'
+      }
+      const key = `${period} ${hour}:00-${hour + 1}:00`
       if (!groups[key]) groups[key] = []
       groups[key].push(apt)
     })
     return groups
   }, [todayAppointments])
+
+  const timeGroupStats = useMemo(() => {
+    const result: Record<string, { pending: number; arrived: number; completed: number; exception: number }> = {}
+    Object.entries(groupedAppointments).forEach(([key, apts]) => {
+      result[key] = {
+        pending: apts.filter(a => a.status === 'pending').length,
+        arrived: apts.filter(a => a.status === 'arrived').length,
+        completed: apts.filter(a => a.status === 'completed').length,
+        exception: apts.filter(a => a.notes?.includes('卡券') && a.status === 'pending').length
+      }
+    })
+    return result
+  }, [groupedAppointments])
 
   const warningAppointments = useMemo(() => {
     return appointments.filter(a =>
@@ -120,8 +143,9 @@ const AppointmentPage: React.FC = () => {
     { key: 'all', label: '全部', count: stats.total },
     { key: 'pending', label: '待到店', count: stats.pending },
     { key: 'arrived', label: '已到店', count: stats.arrived },
+    { key: 'completed', label: '已核销', count: stats.completed },
     { key: 'rescheduled', label: '已改约', count: stats.rescheduled },
-    { key: 'warning', label: '需关注', count: stats.warning }
+    { key: 'warning', label: '需关注', count: stats.exception }
   ]
 
   return (
@@ -138,8 +162,9 @@ const AppointmentPage: React.FC = () => {
 
       <View className={styles.statsRow}>
         <StatCard value={stats.total} label='今日预约' color='primary' />
-        <StatCard value={stats.arrived} label='已到店' color='success' />
-        <StatCard value={stats.warning} label='需关注' color='warning' />
+        <StatCard value={stats.completed} label='已核销' color='success' />
+        <StatCard value={stats.pending} label='待到店' color='warning' />
+        <StatCard value={stats.exception} label='异常待处理' color='error' />
       </View>
 
       {warningAppointments.length > 0 && (
@@ -176,23 +201,48 @@ const AppointmentPage: React.FC = () => {
         </View>
 
         {Object.keys(groupedAppointments).length > 0 ? (
-          Object.entries(groupedAppointments).map(([timeGroup, apts]) => (
-            <View key={timeGroup} className={styles.timeGroup}>
-              <View className={styles.timeGroupTitle}>
-                <View className={styles.timeDot} />
-                <Text className={styles.timeText}>{timeGroup}</Text>
+          Object.entries(groupedAppointments).map(([timeGroup, apts]) => {
+            const gStats = timeGroupStats[timeGroup]
+            return (
+              <View key={timeGroup} className={styles.timeGroup}>
+                <View className={styles.timeGroupTitle}>
+                  <View className={styles.timeDot} />
+                  <Text className={styles.timeText}>{timeGroup}</Text>
+                  <View className={styles.timeGroupIndicators}>
+                    {gStats.pending > 0 && (
+                      <Text className={`${styles.indicator} ${styles.indicatorPending}`}>
+                        待到店 {gStats.pending}
+                      </Text>
+                    )}
+                    {gStats.arrived > 0 && (
+                      <Text className={`${styles.indicator} ${styles.indicatorArrived}`}>
+                        已到店 {gStats.arrived}
+                      </Text>
+                    )}
+                    {gStats.completed > 0 && (
+                      <Text className={`${styles.indicator} ${styles.indicatorCompleted}`}>
+                        已核销 {gStats.completed}
+                      </Text>
+                    )}
+                    {gStats.exception > 0 && (
+                      <Text className={`${styles.indicator} ${styles.indicatorException}`}>
+                        异常 {gStats.exception}
+                      </Text>
+                    )}
+                  </View>
+                </View>
+                {apts.map(apt => (
+                  <AppointmentCard
+                    key={apt.id}
+                    appointment={apt}
+                    hasMatchedCoupon={checkHasMatchedCoupon(apt)}
+                    onVerify={() => handleVerify(apt)}
+                    onViewDetail={() => handleViewDetail(apt)}
+                  />
+                ))}
               </View>
-              {apts.map(apt => (
-                <AppointmentCard
-                  key={apt.id}
-                  appointment={apt}
-                  hasMatchedCoupon={checkHasMatchedCoupon(apt)}
-                  onVerify={() => handleVerify(apt)}
-                  onViewDetail={() => handleViewDetail(apt)}
-                />
-              ))}
-            </View>
-          ))
+            )
+          })
         ) : (
           <View className={styles.empty}>
             <Text className={styles.emptyIcon}>📅</Text>

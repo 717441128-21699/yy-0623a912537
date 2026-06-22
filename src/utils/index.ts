@@ -49,7 +49,8 @@ export const getAppointmentStatusColor = (status: AppointmentStatus): string => 
     pending: '#FF7D00',
     arrived: '#00B42A',
     completed: '#1677FF',
-    cancelled: '#86909C'
+    cancelled: '#86909C',
+    rescheduled: '#FF7D00'
   }
   return colorMap[status]
 }

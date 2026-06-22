@@ -23,6 +23,8 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
   const cardClass = classnames(
     styles.card,
     appointment.status === 'arrived' && styles.arrived,
+    appointment.status === 'completed' && styles.completed,
+    appointment.status === 'rescheduled' && styles.rescheduled,
     hasMatchedCoupon && appointment.status === 'pending' && styles.hasCoupon,
     appointment.notes?.includes('卡券') && styles.warning
   )
@@ -84,7 +86,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
         </View>
       )}
 
-      {showActions && (appointment.status === 'pending' || appointment.status === 'arrived') && (
+      {showActions && (appointment.status === 'pending' || appointment.status === 'arrived' || appointment.status === 'completed') && (
         <View className={styles.footer}>
           <Button
             className={classnames(styles.btn, styles.btnSecondary)}
@@ -92,12 +94,14 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
           >
             查看详情
           </Button>
-          <Button
-            className={classnames(styles.btn, styles.btnPrimary)}
-            onClick={(e) => { e.stopPropagation(); onVerify?.() }}
-          >
-            快速核销
-          </Button>
+          {(appointment.status === 'pending' || appointment.status === 'arrived') && (
+            <Button
+              className={classnames(styles.btn, styles.btnPrimary)}
+              onClick={(e) => { e.stopPropagation(); onVerify?.() }}
+            >
+              快速核销
+            </Button>
+          )}
         </View>
       )}
     </View>
